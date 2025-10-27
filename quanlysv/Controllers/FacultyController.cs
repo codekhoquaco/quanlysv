@@ -36,6 +36,7 @@ namespace QuanLySinhVien.Controllers
         {
             return View();
         }
+
         // POST: /Faculty/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
