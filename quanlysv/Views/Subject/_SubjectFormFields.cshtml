@@ -1,0 +1,28 @@
+﻿@model QuanLySinhVien.Models.Subject
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label asp-for="SubjectName" class="control-label">Tên Môn Học</label>
+            <input asp-for="SubjectName" class="form-control" />
+            <span asp-validation-for="SubjectName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Credits" class="control-label">Số Tín Chỉ</label>
+            <input asp-for="Credits" class="form-control" />
+            <span asp-validation-for="Credits" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group mb-3">
+            <label asp-for="FacultyID" class="control-label">Khoa</label>
+            <select asp-for="FacultyID"
+                    class="form-select"
+                    asp-items="@(ViewData["FacultyList"] as SelectList)">
+                <option value="">-- Chọn khoa --</option>
+            </select>
+            <span asp-validation-for="FacultyID" class="text-danger"></span>
+        </div>
+    </div>
+</div>

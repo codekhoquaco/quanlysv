@@ -1,0 +1,31 @@
+﻿@model IEnumerable<QuanLySinhVien.Models.Role>
+
+@{
+    ViewData["Title"] = "Danh sách Vai trò";
+}
+
+<h1>Danh sách Vai trò 🔒</h1>
+<hr />
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Thêm Vai trò Mới
+    </a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover table-striped mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.RoleName)</th>
+                    <th>@Html.DisplayNameFor(model => model.Description)</th>
+                    <th style="width: 150px;">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <partial name="_RoleTableBody" model="Model" />
+            </tbody>
+        </table>
+    </div>
+</div>

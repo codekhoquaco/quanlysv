@@ -1,0 +1,23 @@
+﻿@model IEnumerable<QuanLySinhVien.Models.Subject>
+
+@if (Model != null)
+{
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.SubjectName)</td>
+            <td class="text-center">@Html.DisplayFor(modelItem => item.Credits)</td>
+            <td>@Html.DisplayFor(modelItem => item.FacultyID)</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.SubjectID" class="btn btn-sm btn-warning me-1">Sửa</a>
+                <a asp-action="Delete" asp-route-id="@item.SubjectID" class="btn btn-sm btn-danger">Xóa</a>
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="4" class="text-center text-danger">Không tìm thấy dữ liệu Môn Học.</td>
+    </tr>
+}

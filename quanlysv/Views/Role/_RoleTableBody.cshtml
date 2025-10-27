@@ -1,0 +1,22 @@
+﻿@model IEnumerable<QuanLySinhVien.Models.Role>
+
+@if (Model != null)
+{
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.RoleName)</td>
+            <td>@Html.DisplayFor(modelItem => item.Description)</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.RoleID" class="btn btn-sm btn-warning me-1">Sửa</a>
+                <a asp-action="Delete" asp-route-id="@item.RoleID" class="btn btn-sm btn-danger">Xóa</a>
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="3" class="text-center text-danger">Không tìm thấy dữ liệu Vai trò.</td>
+    </tr>
+}

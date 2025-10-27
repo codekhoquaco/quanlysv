@@ -1,0 +1,36 @@
+﻿@model QuanLySinhVien.Models.Student
+
+@{
+    ViewData["Title"] = "Thêm Sinh Viên";
+}
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">➕ @ViewData["Title"]</h3>
+    </div>
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div> 
+            
+            <partial name="_StudentFormFields" model="Model" /> 
+            
+            <div class="mt-4 border-top pt-3"> 
+                <button type="submit" class="btn btn-success me-2">
+                    <i class="fas fa-save"></i> Thêm Sinh Viên
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Quay lại
+                </a>
+            </div>
+        </form>
+    <form asp-action="Create" method="post">
+        
+
+    </form>
+</div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

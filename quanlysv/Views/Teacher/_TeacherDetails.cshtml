@@ -1,0 +1,26 @@
+﻿@model QuanLySinhVien.Models.Teacher
+<dl class="row">
+    <dt class="col-sm-4 text-secondary">Mã Giáo viên (TeacherID):</dt>
+    <dd class="col-sm-8">@Html.DisplayFor(model => model.TeacherID)</dd>
+
+    <dt class="col-sm-4 text-secondary">Họ và Tên:</dt>
+    <dd class="col-sm-8">@Html.DisplayFor(model => model.LastName) @Html.DisplayFor(model => model.FirstName)</dd>
+
+    <dt class="col-sm-4 text-secondary">@Html.DisplayNameFor(model => model.Gender):</dt>
+    <dd class="col-sm-8">@Html.DisplayFor(model => model.Gender)</dd>
+
+    <dt class="col-sm-4 text-secondary">@Html.DisplayNameFor(model => model.DateOfBirth):</dt>
+    <dd class="col-sm-8">@Html.DisplayFor(model => model.DateOfBirth)</dd>
+
+    <dt class="col-sm-4 text-secondary">@Html.DisplayNameFor(model => model.Phone):</dt>
+    <dd class="col-sm-8">@Html.DisplayFor(model => model.Phone)</dd>
+
+    <dt class="col-sm-4 text-secondary">@Html.DisplayNameFor(model => model.Email):</dt>
+    <dd class="col-sm-8">@Html.DisplayFor(model => model.Email)</dd>
+
+    <dt class="col-sm-4 text-secondary">@Html.DisplayNameFor(model => model.FacultyID):</dt>
+    <dd class="col-sm-8">@Html.DisplayFor(model => model.FacultyID)</dd>
+
+    <dt class="col-sm-4 text-secondary">@Html.DisplayNameFor(model => model.Position):</dt>
+    <dd class="col-sm-8">@Html.DisplayFor(model => model.Position)</dd>
+</dl>

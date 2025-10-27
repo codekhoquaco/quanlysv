@@ -1,0 +1,16 @@
+﻿@model quanlysv.Models.ErrorViewModel
+
+@{
+    ViewData["Title"] = "Lỗi";
+}
+
+<h1 class="text-danger">Có lỗi xảy ra</h1>
+<h2 class="text-danger">@Model.ErrorMessage</h2>
+
+@if (Model.ShowRequestId)
+{
+    <p>Request ID: <code>@Model.RequestId</code></p>
+}
+
+<p>Vui lòng thử lại sau hoặc liên hệ quản trị viên nếu vấn đề vẫn tiếp diễn.</p>
+<a asp-action="Index" asp-controller="Home" class="btn btn-primary">Quay lại trang chủ</a>

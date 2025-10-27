@@ -1,0 +1,20 @@
+﻿@model QuanLySinhVien.Models.Grade
+<dl class="row">
+    <dt class="col-sm-4 text-secondary">Mã Điểm (GradeID):</dt>
+    <dd class="col-sm-8">@Html.DisplayFor(model => model.GradeID)</dd>
+
+    <dt class="col-sm-4 text-secondary">@Html.DisplayNameFor(model => model.EnrollmentID):</dt>
+    <dd class="col-sm-8">@Html.DisplayFor(model => model.EnrollmentID)</dd>
+
+    <dt class="col-sm-4 text-secondary">@Html.DisplayNameFor(model => model.MidtermScore):</dt>
+    <dd class="col-sm-8">@Html.DisplayFor(model => model.MidtermScore)</dd>
+
+    <dt class="col-sm-4 text-secondary">@Html.DisplayNameFor(model => model.FinalScore):</dt>
+    <dd class="col-sm-8">@Html.DisplayFor(model => model.FinalScore)</dd>
+
+    <dt class="col-sm-4 text-secondary">@Html.DisplayNameFor(model => model.AverageScore):</dt>
+    <dd class="col-sm-8">@Html.DisplayFor(model => model.AverageScore)</dd>
+
+    <dt class="col-sm-4 text-secondary">@Html.DisplayNameFor(model => model.GradeLetter):</dt>
+    <dd class="col-sm-8">@Html.DisplayFor(model => model.GradeLetter)</dd>
+</dl>

@@ -1,0 +1,11 @@
+﻿@model QuanLySinhVien.Models.Role
+<dl class="row">
+    <dt class="col-sm-4 text-secondary">Mã Vai trò (RoleID):</dt>
+    <dd class="col-sm-8">@Html.DisplayFor(model => model.RoleID)</dd>
+
+    <dt class="col-sm-4 text-secondary">@Html.DisplayNameFor(model => model.RoleName):</dt>
+    <dd class="col-sm-8">@Html.DisplayFor(model => model.RoleName)</dd>
+
+    <dt class="col-sm-4 text-secondary">@Html.DisplayNameFor(model => model.Description):</dt>
+    <dd class="col-sm-8">@Html.DisplayFor(model => model.Description)</dd>
+</dl>

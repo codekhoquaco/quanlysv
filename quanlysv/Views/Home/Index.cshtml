@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Trang Quản lý Sinh viên";
+}
+
+<div class="container mt-4">
+    <h2>Xin chào, @ViewBag.Username 👋</h2>
+    <p>Chào mừng bạn đến với hệ thống Quản lý Sinh viên.</p>
+
+    <div>
+        <strong>Vai trò:</strong> @ViewBag.Role
+    </div>
+
+    <hr />
+    <a class="btn btn-danger" asp-controller="Auth" asp-action="Logout">Đăng xuất</a>
+</div>

@@ -1,0 +1,14 @@
+﻿@model QuanLySinhVien.Models.Subject
+<dl class="row">
+    <dt class="col-sm-4 text-secondary">Mã Môn Học (SubjectID):</dt>
+    <dd class="col-sm-8">@Html.DisplayFor(model => model.SubjectID)</dd>
+
+    <dt class="col-sm-4 text-secondary">@Html.DisplayNameFor(model => model.SubjectName):</dt>
+    <dd class="col-sm-8">@Html.DisplayFor(model => model.SubjectName)</dd>
+
+    <dt class="col-sm-4 text-secondary">@Html.DisplayNameFor(model => model.Credits):</dt>
+    <dd class="col-sm-8">@Html.DisplayFor(model => model.Credits)</dd>
+
+    <dt class="col-sm-4 text-secondary">@Html.DisplayNameFor(model => model.FacultyID):</dt>
+    <dd class="col-sm-8">@Html.DisplayFor(model => model.FacultyID)</dd>
+</dl>

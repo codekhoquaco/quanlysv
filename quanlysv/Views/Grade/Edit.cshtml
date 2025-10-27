@@ -1,0 +1,28 @@
+﻿@model QuanLySinhVien.Models.Grade
+
+@{
+    ViewData["Title"] = "Chỉnh Sửa Điểm Số";
+}
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-warning text-dark">
+        <h3 class="mb-0">📝 @ViewData["Title"]</h3>
+    </div>
+    <div class="card-body">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <input type="hidden" asp-for="GradeID" />
+
+            <partial name="_GradeFormFields" model="Model" />
+
+            
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

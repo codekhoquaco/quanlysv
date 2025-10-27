@@ -1,0 +1,45 @@
+﻿@model QuanLySinhVien.Models.Grade
+
+@{
+    ViewData["Title"] = "Thêm Điểm Mới";
+}
+
+<h2 class="mb-4">Thêm Điểm Mới 🎯</h2>
+
+<form asp-action="Create" method="post">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label asp-for="EnrollmentID" class="control-label">Mã Đăng Ký</label>
+                <input asp-for="EnrollmentID" class="form-control" />
+                <span asp-validation-for="EnrollmentID" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="MidtermScore" class="control-label">Điểm Giữa Kỳ</label>
+                <input asp-for="MidtermScore" class="form-control" />
+                <span asp-validation-for="MidtermScore" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="FinalScore" class="control-label">Điểm Cuối Kỳ</label>
+                <input asp-for="FinalScore" class="form-control" />
+                <span asp-validation-for="FinalScore" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label asp-for="AverageScore" class="control-label">Điểm Trung Bình</label>
+                <input asp-for="AverageScore" class="form-control" />
+                <span asp-validation-for="AverageScore" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="GradeLetter" class="control-label">Điểm Chữ</label>
+                <input asp-for="GradeLetter" class="form-control" />
+                <span asp-validation-for="GradeLetter" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+</form>

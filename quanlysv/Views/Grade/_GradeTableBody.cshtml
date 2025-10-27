@@ -1,0 +1,30 @@
+﻿@model IEnumerable<QuanLySinhVien.Models.Grade>
+
+@if (Model != null)
+{
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.EnrollmentID)</td>
+            <td>@Html.DisplayFor(modelItem => item.MidtermScore)</td>
+            <td>@Html.DisplayFor(modelItem => item.FinalScore)</td>
+            <td>@Html.DisplayFor(modelItem => item.AverageScore)</td>
+            <td>
+                @{
+                    var gradeClass = item.GradeLetter == "F" ? "text-danger fw-bold" : "text-success fw-bold";
+                }
+                <span class="@gradeClass">@Html.DisplayFor(modelItem => item.GradeLetter)</span>
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.GradeID" class="btn btn-sm btn-warning me-1">Sửa</a>
+                <a asp-action="Delete" asp-route-id="@item.GradeID" class="btn btn-sm btn-danger">Xóa</a>
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="6" class="text-center text-danger">Không tìm thấy dữ liệu Điểm số.</td>
+    </tr>
+}

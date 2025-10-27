@@ -1,0 +1,37 @@
+﻿@model IEnumerable<QuanLySinhVien.Models.Student>
+
+@{
+    ViewData["Title"] = "Quản lý sinh viên";
+}
+
+<h1>Quản Lý Sinh Viên 🧑‍🎓</h1>
+<hr />
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Thêm sinh viên
+    </a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover table-striped mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>MSSV</th>
+                    <th>Họ tên</th>
+                    <th>Giới tính</th>
+                    <th>Ngày sinh</th>
+                    <th>Email</th>
+                    <th>SĐT</th>
+                    <th>ID Lớp</th>
+                    <th>Tên lớp </th>
+                    <th style="width: 150px;">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <partial name="_StudentTableBody" model="Model" />
+            </tbody>
+        </table>
+    </div>
+</div>

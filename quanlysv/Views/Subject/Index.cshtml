@@ -1,0 +1,32 @@
+﻿@model IEnumerable<QuanLySinhVien.Models.Subject>
+
+@{
+    ViewData["Title"] = "Danh sách Môn Học";
+}
+
+<h1>Danh sách Môn Học 📖</h1>
+<hr />
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Thêm Môn Học Mới
+    </a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-hover table-striped mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.SubjectName)</th>
+                    <th class="text-center">@Html.DisplayNameFor(model => model.Credits)</th>
+                    <th>@Html.DisplayNameFor(model => model.FacultyID)</th>
+                    <th style="width: 150px;">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <partial name="_SubjectTableBody" model="Model" />
+            </tbody>
+        </table>
+    </div>
+</div>

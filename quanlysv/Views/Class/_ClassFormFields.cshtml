@@ -1,0 +1,45 @@
+﻿@model QuanLySinhVien.Models.Class
+
+<form asp-action="AddClass" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label asp-for="ClassName" class="control-label">Tên Lớp</label>
+                <input asp-for="ClassName" class="form-control" />
+                <span asp-validation-for="ClassName" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="AcademicYear" class="control-label">Năm học</label>
+                <input asp-for="AcademicYear" class="form-control" />
+                <span asp-validation-for="AcademicYear" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label asp-for="FacultyID" class="control-label">Khoa</label>
+                <select asp-for="FacultyID"
+                        class="form-select"
+                        asp-items="@(ViewData["FacultyList"] as SelectList)">
+                    <option value="">-- Chọn khoa --</option>
+                </select>
+                <span asp-validation-for="FacultyID" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="HomeroomTeacher" class="control-label">Giáo viên</label>
+                <select asp-for="HomeroomTeacher"
+                        class="form-select"
+                        asp-items="@(ViewData["TeacherList"] as SelectList)">
+                    <option value="">-- Chọn giáo viên --</option>
+                </select>
+                <span asp-validation-for="HomeroomTeacher" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
