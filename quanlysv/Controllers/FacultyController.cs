@@ -38,7 +38,7 @@ namespace QuanLySinhVien.Controllers
         }
         // POST: /Faculty/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Faculty faculty)
         {
             if (!ModelState.IsValid)
