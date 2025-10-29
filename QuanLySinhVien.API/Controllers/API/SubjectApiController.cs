@@ -96,23 +96,8 @@ namespace QuanLySinhVien.API.Controllers.API
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSubject(int id)
         {
-            try
-            {
-                var affectedRows = await _context.Database.ExecuteSqlRawAsync(
-                    $"CALL DeleteSubject({id})");
-                if (affectedRows > 0)
-                {
-                    return Ok(new { message = "Xóa môn học thành công." });
-                }
-                else
-                {
-                    return NotFound(new { message = "Môn học không tồn tại." });
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Lỗi khi xóa môn học.", details = ex.Message });
-            }
+           await _context.Database.ExecuteSqlRawAsync($"CALL DeleteSubject({id})");
+            return Ok(new { message = "✅ Xóa môn học thành công" });
         }
     }
 }

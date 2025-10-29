@@ -126,37 +126,35 @@ public class SubjectController : Controller
     }
 
     // --- 7. DELETE (GET) ---
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int id)
-    { 
-        var cilent = new RestClient(apiBaseUrl);
-        var request = new RestRequest($"api/SubjectApi/{id}", Method.Get);
-        var response = await cilent.ExecuteAsync(request);
-        if (!response.IsSuccessful)
-        {
-            TempData["Error"] = "Không tìm thấy môn học để xóa.";
-            return RedirectToAction(nameof(Index));
-        }
-           ViewBag.Error = $"Không thể xóa môn học. Chi tiết: {response.Content ?? "Không có thông tin lỗi"}";
-        
-       return RedirectToAction(nameof(Index));
-    }
     [HttpGet]
     public async Task<IActionResult> Delete(int id)
     {
-        var cilent = new RestClient(apiBaseUrl);
+        var client = new RestClient(apiBaseUrl);
         var request = new RestRequest($"api/SubjectApi/{id}", Method.Get);
-        var response = await cilent.ExecuteAsync(request);
+        var response = await client.ExecuteAsync(request);
+
         if (!response.IsSuccessful)
-        {
             return NotFound();
-        }
         var subject = JsonSerializer.Deserialize<Subject>(response.Content!,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-        if (subject == null)
-            return NotFound();
+
         return View(subject);
+    }
+
+    // --- 8. DELETE (POST) ---
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var client = new RestClient(apiBaseUrl);
+        var request = new RestRequest($"api/SubjectApi/{id}", Method.Delete);
+        var response = await client.ExecuteAsync(request);
+
+        if (response.IsSuccessful)
+            return RedirectToAction(nameof(Index));
+             
+        ViewBag.Error = $"Không thể xóa môn học.";
+        return RedirectToAction(nameof(Index));
     }
 
 }

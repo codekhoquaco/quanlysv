@@ -40,7 +40,18 @@ namespace QuanLySinhVien.Controllers
 
             return View(students);
         }
+        // phuong thuc ho tro lay id theo tung sinh vien 
+        private Student GetStudentById(int id)
+        {
+            var studentModel = _context.Students
+                .FromSqlRaw($"CALL GetStudentById({id})")
+                .AsNoTracking()
+                .ToList()
+                .FirstOrDefault();
 
+            return studentModel;
+
+        }
         // GET: /Student/Create
         [HttpGet]
         public async Task<IActionResult> Create()
