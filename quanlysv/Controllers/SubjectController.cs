@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QuanLySinhVien.Data;
@@ -34,17 +35,6 @@ public class SubjectController : Controller
     }
 
     // --- Phương thức hỗ trợ: Lấy Môn học theo ID ---
-    private Subject GetSubjectById(int id)
-    {
-        // Gọi SP GetSubjectById
-        var subjectModel = _context.Subjects
-           .FromSqlRaw($"CALL GetSubjectById({id})")
-           .AsNoTracking()
-           .ToList() //  dùng ToList() hoặc ToListAsync() để nhận kết quả
-           .FirstOrDefault();
-
-        return subjectModel;
-    }
 
     // --- 2. CREATE (GET) ---
     [HttpGet]
@@ -80,20 +70,26 @@ public class SubjectController : Controller
         ViewBag.Error = $"Không thể thêm môn học mới. Chi tiết: {response.Content ?? "Không có thông tin lỗi"}";
         return View(subject);
     }
-    // --- 3. DETAILS ---
-    public IActionResult Details(int id)
-    {
-        var subjectModel = GetSubjectById(id);
-        if (subjectModel == null) return NotFound();
-        return View(subjectModel);
-    }
+    //// --- 3. DETAILS ---
+    //public IActionResult Details(int id)
+    //{
+    //    var subjectModel = GetSubjectById(id);
+    //    if (subjectModel == null) return NotFound();
+    //    return View(subjectModel);
+    //}
 
     // --- 5. EDIT (GET) ---
     [HttpGet]
     public IActionResult Edit(int id)
     {
-        var subjectModel = GetSubjectById(id);
-        if (subjectModel == null) return NotFound();
+        var client = new RestClient(apiBaseUrl);
+        var request = new RestRequest($"api/SubjectApi/{id}", Method.Get);
+        var response = client.Execute(request);
+        if (!response.IsSuccessful)
+            return NotFound();
+
+        var subjectModel = JsonSerializer.Deserialize<Subject>(response.Content!,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         var faculties = _context.Faculties
             .Select(f => new {

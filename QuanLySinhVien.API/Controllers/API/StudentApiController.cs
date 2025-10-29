@@ -27,21 +27,21 @@ namespace QuanLySinhVien.API.Controllers.API
 
         }
 
-        //// ✅ GET: api/StudentApi/5
-        //[HttpGet("{id}")]
-        //public IActionResult GetStudentById(int id)
-        //{
-        //    var student = _context.Students
-        //        .FromSqlRaw($"CALL GetStudentById({id})")
-        //        .AsNoTracking()
-        //        .AsEnumerable()
-        //        .FirstOrDefault(); 
+        // ✅ GET: api/StudentApi/5
+        [HttpGet("{id}")]
+        public IActionResult GetStudentById(int id)
+        {
+            var student = _context.Students
+                .FromSqlRaw($"CALL GetStudentById({id})")
+                .AsNoTracking()
+                .AsEnumerable()
+                .FirstOrDefault(); 
 
-        //    if (student == null)
-        //        return NotFound();
+            if (student == null)
+                return NotFound();
 
-        //    return Ok(student);
-        //}
+            return Ok(student);
+        }
 
 
         // ✅ POST: api/StudentApi

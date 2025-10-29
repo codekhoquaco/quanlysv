@@ -24,6 +24,22 @@ namespace QuanLySinhVien.API.Controllers.API
                 .ToListAsync();
             return Ok(subjects);
         }
+        // get api/subject/5 lay mon hoc theo id
+        [HttpGet("{id}")]
+        public IActionResult GetSubjectById(int id)
+        {
+            var subject = _context.Subjects
+                .FromSqlRaw($"CALL GetSubjectById({id})")
+                .AsNoTracking()
+                .AsEnumerable()
+                .FirstOrDefault();
+
+            if (subject == null)
+                return NotFound();
+
+            return Ok(subject);
+        }
+        
         // get api/subject/5 lay danh sach khoa cho dropdown
         [HttpGet("FacultyList")]
         public async Task<IActionResult> GetFacultyList()
