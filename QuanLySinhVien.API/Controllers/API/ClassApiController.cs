@@ -27,7 +27,7 @@ namespace QuanLySinhVien.ApiControllers
             return Ok(classes);
         }
         // GET: api/ClassApi/5
-        [HttpGet("{id}")] // BỎ COMMENT ĐI!
+        [HttpGet("{id}")]
         public IActionResult GetClassById(int id)
         {
             var cls = _context.Classes

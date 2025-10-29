@@ -32,8 +32,8 @@ public class ClassController : Controller
             return View(classes);
         }
 
-    // GET: /Class/Create
-    [HttpGet]
+        // GET: /Class/Create
+        [HttpGet]
         public IActionResult Create()
         {
             // Lấy danh sách khoa (Giả định Faculty Model đã OK)
@@ -60,25 +60,8 @@ public class ClassController : Controller
 
             return View();
         }
-
-        // GET: /Class/Edit/5
-        [HttpGet]
-        public async Task<IActionResult> EditClass(int id)
-        {
-            var client = new RestClient(apiBaseUrl);
-            var request = new RestRequest($"api/ClassApi/{id}", Method.Get); 
-            var response = await client.ExecuteAsync(request);
-
-            if (!response.IsSuccessful)
-                return NotFound();
-
-            var cls = JsonSerializer.Deserialize<Class>(response.Content!,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-            return View(cls);
-        }
-    // POST: /Class/Create
-    [HttpPost]
+        // POST: /Class/Create
+        [HttpPost]
         [ValidateAntiForgeryToken]
         // SỬA: Chuyển sang Async Task<IActionResult>
         public async Task<IActionResult> AddClass(Class cls)
@@ -104,7 +87,22 @@ public class ClassController : Controller
             ViewBag.Error = $"Không thể thêm lớp mới. Chi tiết: {response.Content}";
             return View(cls);
         }
+        // GET: /Class/Edit/5
+        [HttpGet]
+        public async Task<IActionResult> EditClass(int id)
+        {
+            var client = new RestClient(apiBaseUrl);
+            var request = new RestRequest($"api/ClassApi/{id}", Method.Get);
+            var response = await client.ExecuteAsync(request);
 
+            if (!response.IsSuccessful)
+                return NotFound();
+
+            var cls = JsonSerializer.Deserialize<Class>(response.Content!,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            return View(cls);
+        }
         // POST: /Class/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
