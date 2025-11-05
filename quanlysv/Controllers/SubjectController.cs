@@ -109,14 +109,18 @@ public class SubjectController : Controller
     {
         if (id != subject.SubjectID)
             return BadRequest();
+
         if (!ModelState.IsValid)
             return View(subject);
+
         var client = new RestClient(apiBaseUrl);
         var request = new RestRequest($"api/SubjectApi/Edit/{id}", Method.Put);
         request.AddJsonBody(subject);
+
         var response = client.Execute(request);
         if (response.IsSuccessful)
             return RedirectToAction(nameof(Index));
+
         ViewBag.Error = $"Không thể cập nhật môn học. Chi tiết: {response.Content ?? "Không có thông tin lỗi"}";
         return View(subject);
     }

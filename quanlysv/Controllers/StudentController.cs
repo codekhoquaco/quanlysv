@@ -6,7 +6,6 @@ using QuanLySinhVien.Models;
 using quanlysv;
 using RestSharp;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace QuanLySinhVien.Controllers
 {
@@ -40,8 +39,6 @@ namespace QuanLySinhVien.Controllers
 
             return View(students);
         }
-        // phuong thuc ho tro lay id theo tung sinh vien 
-
         // GET: /Student/Create
         [HttpGet]
         public async Task<IActionResult> Create()

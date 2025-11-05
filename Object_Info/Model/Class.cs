@@ -22,7 +22,7 @@ namespace QuanLySinhVien.Models
 
         [MaxLength(100)]
         [Display(Name = "Giáo viên chủ nhiệm")]
-        public string HomeroomTeacher { get; set; }
+        public int  HomeroomTeacher { get; set; }
     }
     public class ClassListItem
     {

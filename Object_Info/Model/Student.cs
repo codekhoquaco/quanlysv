@@ -49,3 +49,4 @@ namespace QuanLySinhVien.Models
         public string ClassName { get; set; } // Thuộc tính bổ sung để hiển thị tên lớp
     }
 }
+
