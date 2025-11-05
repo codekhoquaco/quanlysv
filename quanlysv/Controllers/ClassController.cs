@@ -64,7 +64,7 @@ public class ClassController : Controller
         [HttpPost]
         [ValidateAntiForgeryToken]
         // SỬA: Chuyển sang Async Task<IActionResult>
-        public async Task<IActionResult> AddClass(Class cls)
+        public async Task<IActionResult> Create(Class cls)
         {
             if (!ModelState.IsValid)
                 return View(cls);

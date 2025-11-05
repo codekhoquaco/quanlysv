@@ -46,7 +46,7 @@ namespace QuanLySinhVien.Models
         [Display(Name = "ID Lớp Học")]
         public int ClassID { get; set; } // chỉ là cột, không có FK
 
-        public string ClassName { get; set; } // Thuộc tính bổ sung để hiển thị tên lớp
+        //public string ClassName { get; set; } // Thuộc tính bổ sung để hiển thị tên lớp
     }
 }
 

@@ -46,8 +46,8 @@ namespace QuanLySinhVien.Controllers
             var classes = await _context.Classes
                 .Select(c => new
                 {
-                    ClassID = c.ClassID,
-                    ClassName = c.ClassName + " (" + c.ClassID + ")"
+                   ClassID = c.ClassID,
+                   ClassName = c.ClassName + " (" + c.ClassID + ")"
                 })
                 .ToListAsync();
             ViewBag.ClassList = new SelectList(classes, "ClassID", "ClassName");
