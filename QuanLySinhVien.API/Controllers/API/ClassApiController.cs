@@ -41,7 +41,7 @@ namespace QuanLySinhVien.ApiControllers
             
             return Ok(cls);
         }
-        [HttpPost("Add")]
+        [HttpPost("AddClass")]
         public async Task<IActionResult> AddClass([FromBody] Class cls)
         {
             if (!ModelState.IsValid)
@@ -64,7 +64,7 @@ namespace QuanLySinhVien.ApiControllers
             }
         }        
         // PUT: api/ClassApi/5
-        [HttpPut("Edit/{id}")]
+        [HttpPut("EditClass")]
         public async Task<IActionResult> EditClass(int id, [FromBody] Class model)
         {
             if (id != model.ClassID)

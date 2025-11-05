@@ -77,8 +77,7 @@ namespace QuanLySinhVien.Controllers
                 return RedirectToAction(nameof(Index));
 
             ViewBag.Error = $"Không thể thêm giáo viên. Chi tiết: {respone.Content}";
-            // Tải lại SelectList nếu lỗi
-            ViewData["FacultyList"] = new SelectList(_context.Faculties.ToList(), "FacultyID", "FacultyName", teacher.FacultyID);
+
             return View(teacher);
         }
 
@@ -118,7 +117,6 @@ namespace QuanLySinhVien.Controllers
                 return NotFound();
 
             var client = new RestClient(apiBaseUrl);
-            // SỬA ROUTING và METHOD: Gửi tới api/TeacherApi/5 bằng PUT
             var request = new RestRequest($"api/TeacherApi/{id}", Method.Put);
             request.AddJsonBody(teacher);
 

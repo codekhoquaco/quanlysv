@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QuanLySinhVien.Data;
@@ -34,7 +35,7 @@ public class ClassController : Controller
 
         // GET: /Class/Create
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult AddClass()
         {
             // Lấy danh sách khoa (Giả định Faculty Model đã OK)
             var faculties = _context.Faculties
@@ -46,30 +47,31 @@ public class ClassController : Controller
             .ToList();
             ViewData["FacultyList"] = new SelectList(faculties, "FacultyID", "FacultyName");
 
-            // Lấy danh sách giáo viên (Giả định Teacher Model đã được sửa lỗi NotMapped)
-            var teacher = _context.Teachers
-            .Select(t => new
-            {
-                TeacherID = t.TeacherID,
-                // Sử dụng tên thuộc tính mới để tránh xung đột (Ví dụ: FullName)
-                FullName = t.FirstName + " " + t.LastName + " (" + t.TeacherID + ")"
-            })
-            .ToList();
-            // Dùng FullName trong SelectList
-            ViewData["TeacherList"] = new SelectList(teacher, "TeacherID", "FullName");
+        // Lấy danh sách giáo viên (Giả định Teacher Model đã được sửa lỗi NotMapped)
+        var teacher = _context.Teachers
+        .Select(t => new
+        {
+            TeacherID = t.TeacherID,
+            // Sử dụng tên thuộc tính mới để tránh xung đột (Ví dụ: FullName)
+            FullName = t.FirstName + " " + t.LastName + " (" + t.TeacherID + ")"
+        })
+        .ToList();
+        // Dùng FullName trong SelectList
+        ViewData["TeacherList"] = new SelectList(teacher, "TeacherID", "FullName");
 
-            return View();
+        return View();
         }
         // POST: /Class/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         // SỬA: Chuyển sang Async Task<IActionResult>
-        public async Task<IActionResult> Create(Class cls)
+        public async Task<IActionResult> AddClass(Class cls)
         {
             if (!ModelState.IsValid)
                 return View(cls);
+
             var client = new RestClient(apiBaseUrl);
-            var request = new RestRequest("api/ClassApi/Add", Method.Post);
+            var request = new RestRequest("api/ClassApi/AddClass", Method.Post);
 
             request.AddJsonBody(cls);
             var response = await client.ExecuteAsync(request);
@@ -77,13 +79,6 @@ public class ClassController : Controller
             if (response.IsSuccessful)
                 return RedirectToAction(nameof(Index));
             
-            // Tải lại SelectList nếu lỗi
-            var faculties = _context.Faculties.ToList();
-            ViewData["FacultyList"] = new SelectList(faculties, "FacultyID", "FacultyName", cls.FacultyID);
-
-            var teachers = _context.Teachers.Select(t => new { TeacherID = t.TeacherID, FullName = t.FirstName + " " + t.LastName + " (" + t.TeacherID + ")" }).ToList();
-            ViewData["TeacherList"] = new SelectList(teachers, "TeacherID", "FullName", cls.HomeroomTeacher);
-
             ViewBag.Error = $"Không thể thêm lớp mới. Chi tiết: {response.Content}";
             return View(cls);
         }
@@ -92,7 +87,7 @@ public class ClassController : Controller
         public async Task<IActionResult> EditClass(int id)
         {
             var client = new RestClient(apiBaseUrl);
-            var request = new RestRequest($"api/ClassApi/{id}", Method.Get);
+            var request = new RestRequest($"api/ClassApi/EditClass", Method.Get);
             var response = await client.ExecuteAsync(request);
 
             if (!response.IsSuccessful)
@@ -112,7 +107,7 @@ public class ClassController : Controller
                 return BadRequest();
 
             var client = new RestClient(apiBaseUrl);
-            var request = new RestRequest($"api/ClassApi/Edit/{id}", Method.Put);
+            var request = new RestRequest($"api/ClassApi/EditClass", Method.Put);
             request.AddJsonBody(model);
 
             var response = await client.ExecuteAsync(request);

@@ -20,7 +20,6 @@ namespace QuanLySinhVien.Models
         [Display(Name = "Năm học")]
         public string AcademicYear { get; set; }
 
-        [MaxLength(100)]
         [Display(Name = "Giáo viên chủ nhiệm")]
         public int  HomeroomTeacher { get; set; }
     }

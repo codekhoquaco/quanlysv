@@ -46,24 +46,26 @@ namespace QuanLySinhVien.Controllers
             var classes = await _context.Classes
                 .Select(c => new
                 {
-                   ClassID = c.ClassID,
-                   ClassName = c.ClassName + " (" + c.ClassID + ")"
+                    ClassID = c.ClassID,
+                    ClassName = c.ClassName + " (" + c.ClassID + ")"
                 })
                 .ToListAsync();
             ViewBag.ClassList = new SelectList(classes, "ClassID", "ClassName");
+
             return View();
         }
+
 
         // POST: /Student/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int id ,Student student)
+        public async Task<IActionResult> Create(Student student)
         {
             if (!ModelState.IsValid)
                 return View(student);
 
             var client = new RestClient(apiBaseUrl);
-            var request = new RestRequest($"api/StudentApi/{id}", Method.Post);
+            var request = new RestRequest("api/StudentApi/Create", Method.Post);
 
             request.AddJsonBody(student);
             var response = await client.ExecuteAsync(request);
@@ -74,6 +76,7 @@ namespace QuanLySinhVien.Controllers
             ViewBag.Error = "Không thể thêm sinh viên mới.";
             return View(student);
         }
+
 
         // GET: /Student/Edit/5
         [HttpGet]
