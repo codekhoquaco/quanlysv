@@ -33,13 +33,14 @@ namespace QuanLySinhVien.Models
 
         [EmailAddress]
         public string Email { get; set; }
-        [Display(Name = "Id Khoa")]
+
+        [Required(ErrorMessage = "Vui lòng chọn khoa")]
         public int FacultyID { get; set; }
 
         [MaxLength(50)]
         [Display(Name = "Chức vụ")]
         public string Position { get; set; }
-        [NotMapped]
-        public string TeacherName { get; set; }
+        //[NotMapped]
+        //public string TeacherName { get; set; }
     }
 }

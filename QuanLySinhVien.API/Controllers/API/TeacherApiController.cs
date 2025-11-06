@@ -41,7 +41,7 @@ namespace QuanLySinhVien.API.Controllers.API
         public async Task<IActionResult> AddTeacher([FromBody] Teacher teacher)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return BadRequest(new {errors = ModelState});
             try
             {
                 await _context.Database.ExecuteSqlRawAsync(

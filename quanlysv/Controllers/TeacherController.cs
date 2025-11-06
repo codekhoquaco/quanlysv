@@ -103,8 +103,7 @@ namespace QuanLySinhVien.Controllers
                     FacultyName = f.FacultyName + " (" + f.FacultyID + ")"
                 })
                 .ToList();
-            ViewData["FacultyList"] = new SelectList(faculties, "FacultyID", "FacultyName", teacher.FacultyID);
-
+            ViewData["FacultyList"] = new SelectList(_context.Faculties.ToList(),"FacultyID","FacultyName",teacher.FacultyID);
             return View(teacher);
         }
 
