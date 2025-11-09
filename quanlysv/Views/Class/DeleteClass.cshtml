@@ -8,28 +8,33 @@
 <hr />
 
 <div class="card border-danger mb-4 shadow-sm">
-
     <div class="card-header bg-danger text-white">
-        <h5 class="mb-0">CẢNH BÁO: Hành động này không thể hoàn tác và có thể xóa Sinh viên liên quan!</h5>
+        <h5 class="mb-0">
+            CẢNH BÁO: Hành động này không thể hoàn tác và có thể ảnh hưởng đến dữ liệu liên quan!
+        </h5>
     </div>
 
     <div class="card-body">
-        <h4 class="card-title text-danger mb-4">Bạn có chắc chắn muốn xóa lớp học này?</h4>
+        <h4 class="card-title text-danger mb-4">
+            Bạn có chắc chắn muốn xóa lớp học này?
+        </h4>
 
         <div class="p-3 mb-4 border rounded bg-light">
             <h5 class="text-primary mb-3">Thông tin chi tiết Lớp Học</h5>
 
-            <partial name="_ClassDetails" model="Model" />
-
+            @await Html.PartialAsync("_ClassDetails", Model)
         </div>
 
-        <form asp-action="DeleteClass">
-            <input type="hidden" asp-for="ClassID" />
+        <form asp-action="Delete" method="post">
+            @* ĐẢM BẢO TRUYỀN ĐÚNG ID *@
+            <input type="hidden" name="id" value="@Model.ClassID" />
 
-            <input type="submit" value="✅ Xác nhận Xóa Vĩnh Viễn" class="btn btn-danger btn-lg me-3" />
+            <button type="submit" class="btn btn-danger btn-lg me-3">
+                ✅ Xác nhận Xóa Vĩnh Viễn
+            </button>
 
             <a asp-action="Index" class="btn btn-secondary btn-lg">
-                <i class="fas fa-arrow-left"></i> Hủy Bỏ
+                Hủy Bỏ
             </a>
         </form>
     </div>
