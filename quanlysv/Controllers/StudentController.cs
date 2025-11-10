@@ -20,7 +20,7 @@ namespace QuanLySinhVien.Controllers
         }
 
         // GET: /Student
-        public async Task<IActionResult> Index(string keyword)
+        public async Task<IActionResult> Index(string keyword, int? page)
         {
             var client = new RestClient(apiBaseUrl);
             var request = new RestRequest("api/StudentApi/GetAllStudents", Method.Get);
@@ -44,8 +44,20 @@ namespace QuanLySinhVien.Controllers
                     .Contains(keyword, StringComparison.OrdinalIgnoreCase))
                     .ToList();
             }
+            // phan trang
+            int pageSize = 5;
+            int pageNumber = page ?? 1;
+            
+            var pagedData = students
+                .OrderBy(s => s.StudentID)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+            ViewBag.Keyword = keyword;
+            ViewBag.PageNumber = pageNumber;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)students.Count / pageSize);
 
-            return View(students);
+            return View(pagedData);
         }
         // GET: /Student/Create
         [HttpGet]

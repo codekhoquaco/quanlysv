@@ -19,7 +19,7 @@ public class SubjectController : Controller
     {
         _context = context;
     }
-    public async Task<IActionResult>Index(string keyword)
+    public async Task<IActionResult>Index(string keyword, int? page)
     {
         var client = new RestClient(apiBaseUrl);
         var request = new RestRequest("api/SubjectApi/GetAllSubjects", Method.Get);
@@ -38,10 +38,21 @@ public class SubjectController : Controller
                 .Where(s => s.SubjectName.Contains(keyword, StringComparison.OrdinalIgnoreCase))
                 .ToList();
         }
-        return View(subjects);
-    }
+        //phan trang 
+        int pageSize = 5;
+        int paageNumber = page ?? 1;
 
-    // --- Phương thức hỗ trợ: Lấy Môn học theo ID ---
+        var PageData = subjects
+            .OrderBy(s => s.SubjectID)
+            .Skip((paageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        ViewBag.Keyword = keyword;
+        ViewBag.PageNumber = paageNumber;
+        ViewBag.TotalPages = (int)Math.Ceiling((double)subjects.Count / pageSize);
+        return View(PageData);
+    }
 
     // --- 2. CREATE (GET) ---
     [HttpGet]

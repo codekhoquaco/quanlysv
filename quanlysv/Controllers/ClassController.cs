@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using QuanLySinhVien.Data;
 using QuanLySinhVien.Models;
 using quanlysv;
 using RestSharp;
-using System.Diagnostics.Eventing.Reader;
 using System.Text.Json;
-using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace QuanLySinhVien.Controllers
 {
@@ -34,7 +31,7 @@ namespace QuanLySinhVien.Controllers
                 "TeacherID", "FullName");
         }
 
-        public async Task<IActionResult> Index(string keyword)
+        public async Task<IActionResult> Index(string keyword, int? page)
         {
             var client = new RestClient(apiBaseUrl);
             var request = new RestRequest("api/ClassApi/GetAllClasses", Method.Get);
@@ -57,8 +54,20 @@ namespace QuanLySinhVien.Controllers
                     .Where(c => c.ClassName.Contains(keyword, StringComparison.OrdinalIgnoreCase))
                     .ToList();
             }
+            //phan trang
+            int pageSize = 5;
+            int pageNumer = page ?? 1;
 
-            return View(classes);
+            var pagedData = classes
+                .OrderBy(c => c.ClassID)
+                .Skip((pageNumer - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+            ViewBag.Keyword = keyword;
+            ViewBag.PageNumber = pageNumer;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)classes.Count / pageSize);
+
+            return View(pagedData);
         }
 
         [HttpGet]

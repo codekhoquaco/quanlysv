@@ -21,7 +21,7 @@ namespace QuanLySinhVien.Controllers
         }
 
         // --- 1. INDEX (Danh sách) ---
-        public async Task<IActionResult>Index(string keyword)
+        public async Task<IActionResult>Index(string keyword,int? page)
         {
             var client = new RestClient(apiBaseUrl);
             var request = new RestRequest("api/TeacherApi/GetAllTeachers", Method.Get);
@@ -42,7 +42,21 @@ namespace QuanLySinhVien.Controllers
                     .Contains(keyword, StringComparison.OrdinalIgnoreCase))
                     .ToList();
             }
-            return View(teachers);
+            //phan trang
+            int pageSize = 5;
+            int pageNumber = page ?? 1;
+
+            var pagedData = teachers
+                .OrderBy(t => t.TeacherID)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+            
+            ViewBag.Keyword = keyword;
+            ViewBag.PageNumber = pageNumber;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)teachers.Count / pageSize);
+
+            return View(pagedData);
         }
         // --- 2. CREATE (GET) ---
         [HttpGet]

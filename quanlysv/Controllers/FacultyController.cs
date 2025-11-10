@@ -4,7 +4,7 @@ using QuanLySinhVien.Models;
 using quanlysv;
 using RestSharp;
 using System.Text.Json;
-
+using PagedList;
 namespace QuanLySinhVien.Controllers
 {
     public class FacultyController : Controller
@@ -12,7 +12,7 @@ namespace QuanLySinhVien.Controllers
         private readonly string apiBaseUrl = Config_Info.APIURL;
         // GET: /Faculty
 
-        public async Task<IActionResult> Index(string keyword)
+        public async Task<IActionResult> Index(string keyword,int? page)
         {
             var client = new RestClient(apiBaseUrl);
             var request = new RestRequest("api/FacultyApi/GetAllFaculties", Method.Get);
@@ -34,7 +34,21 @@ namespace QuanLySinhVien.Controllers
                     .Where(f => f.FacultyName.Contains(keyword, StringComparison.OrdinalIgnoreCase))
                     .ToList();
             }
-            return View(faculties);
+            // phan trang
+            int pageSize = 5;
+            int pageNumber = page ?? 1;
+
+            var pagedData = faculties
+                .OrderBy(f => f.FacultyID)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            ViewBag.Keyword = keyword;
+            ViewBag.PageNumber = pageNumber;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)faculties.Count / pageSize);
+
+            return View(pagedData);
         }
 
         // GET: /Faculty/Create

@@ -1,0 +1,17 @@
+﻿<div class="d-flex justify-content-center mt-3">
+    <nav>
+        <ul class="pagination">
+
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.PageNumber ? "active" : "")">
+                    <a class="page-link"
+                       href="@Url.Action("Index", new { page = i, keyword = ViewBag.Keyword })">
+                        @i
+                    </a>
+                </li>
+            }
+
+        </ul>
+    </nav>
+</div>
