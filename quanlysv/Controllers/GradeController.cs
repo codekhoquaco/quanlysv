@@ -20,7 +20,7 @@ public class GradeController : Controller
     {
         var client = new RestClient(apiBaseUrl);
         var request = new RestRequest("api/GradeApi/GetAllGrades", Method.Get);
-        Console.WriteLine(client.BuildUri(request)); // debug URL
+       
         var response = await client.ExecuteAsync(request);
         if (!response.IsSuccessful)
         {
@@ -31,39 +31,32 @@ public class GradeController : Controller
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         return View(grades);
     }
-    private Grade GetGradeById(int id)
-    {
-        var gradeModel = _context.Grades
-           .FromSqlRaw($"CALL GetGradeById({id})")
-           .AsNoTracking()
-           .ToList()
-           .FirstOrDefault();
-        return gradeModel;
-    }
 
     [HttpGet]
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
-        return View();
+       return View();
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Create(Grade grade)
+    public async Task<IActionResult> Create([Bind("EnrollmentID,Score,GradeType,DateRecorded")] Grade grade)
     {
-        if (!ModelState.IsValid)
-            return View(grade);
-
-        var client = new RestClient(apiBaseUrl);
-        var request = new RestRequest("api/GradeApi/Add", Method.Post);
-        request.AddJsonBody(grade);
-
-        var response = client.Execute(request);
-
-        if (response.IsSuccessful)
-            return RedirectToAction(nameof(Index));
-
-        ViewBag.Error = $"Không thể thêm môn học mới. Chi tiết: {response.Content ?? "Không có thông tin lỗi"}";
+        if (ModelState.IsValid)
+        {
+            var client = new RestClient(apiBaseUrl);
+            var request = new RestRequest("api/GradeApi/Add", Method.Post);
+            request.AddJsonBody(grade);
+            var response = await client.ExecuteAsync(request);
+            if (response.IsSuccessful)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Lỗi khi thêm điểm.");
+            }
+        }
         return View(grade);
     }
 

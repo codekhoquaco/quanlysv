@@ -12,7 +12,7 @@ namespace QuanLySinhVien.Controllers
         private readonly string apiBaseUrl = Config_Info.APIURL;
         // GET: /Faculty
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string keyword)
         {
             var client = new RestClient(apiBaseUrl);
             var request = new RestRequest("api/FacultyApi/GetAllFaculties", Method.Get);
@@ -26,6 +26,14 @@ namespace QuanLySinhVien.Controllers
             }
             var faculties = JsonSerializer.Deserialize<List<Faculty>>(response.Content!,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            // Nếu có từ khóa thì lọc
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                faculties = faculties
+                    .Where(f => f.FacultyName.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
             return View(faculties);
         }
 

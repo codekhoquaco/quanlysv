@@ -5,7 +5,9 @@ using QuanLySinhVien.Data;
 using QuanLySinhVien.Models;
 using quanlysv;
 using RestSharp;
+using System.Diagnostics.Eventing.Reader;
 using System.Text.Json;
+using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace QuanLySinhVien.Controllers
 {
@@ -32,7 +34,7 @@ namespace QuanLySinhVien.Controllers
                 "TeacherID", "FullName");
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string keyword)
         {
             var client = new RestClient(apiBaseUrl);
             var request = new RestRequest("api/ClassApi/GetAllClasses", Method.Get);
@@ -40,12 +42,23 @@ namespace QuanLySinhVien.Controllers
             var response = await client.ExecuteAsync(request);
 
             if (!response.IsSuccessful)
+            {
+                ViewBag.Error = "Không thể tải danh sách lớp.";
                 return View(new List<Class>());
+            }
 
-            var list = JsonSerializer.Deserialize<List<Class>>(response.Content!,
+            var classes = JsonSerializer.Deserialize<List<Class>>(response.Content!,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-            return View(list);
+            // Nếu có từ khóa thì lọc
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                classes = classes
+                    .Where(c => c.ClassName.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+
+            return View(classes);
         }
 
         [HttpGet]

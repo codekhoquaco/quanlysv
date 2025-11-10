@@ -19,7 +19,7 @@ public class SubjectController : Controller
     {
         _context = context;
     }
-    public async Task<IActionResult>Index()
+    public async Task<IActionResult>Index(string keyword)
     {
         var client = new RestClient(apiBaseUrl);
         var request = new RestRequest("api/SubjectApi/GetAllSubjects", Method.Get);
@@ -31,6 +31,13 @@ public class SubjectController : Controller
         }
         var subjects = JsonSerializer.Deserialize<List<Subject>>(response.Content!,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        // Nếu có từ khóa thì lọc
+        if (!string.IsNullOrEmpty(keyword))
+        {
+            subjects = subjects
+                .Where(s => s.SubjectName.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+        }
         return View(subjects);
     }
 

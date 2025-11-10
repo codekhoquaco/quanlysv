@@ -20,7 +20,7 @@ namespace QuanLySinhVien.Controllers
         }
 
         // GET: /Student
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string keyword)
         {
             var client = new RestClient(apiBaseUrl);
             var request = new RestRequest("api/StudentApi/GetAllStudents", Method.Get);
@@ -36,6 +36,14 @@ namespace QuanLySinhVien.Controllers
 
             var students = JsonSerializer.Deserialize<List<Student>>(response.Content!,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            // Nếu có từ khóa thì lọc
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                students = students
+                    .Where(s => (s.FirstName + " " + s.LastName)
+                    .Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
 
             return View(students);
         }

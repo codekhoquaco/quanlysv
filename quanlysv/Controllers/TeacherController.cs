@@ -21,24 +21,28 @@ namespace QuanLySinhVien.Controllers
         }
 
         // --- 1. INDEX (Danh sách) ---
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult>Index(string keyword)
         {
             var client = new RestClient(apiBaseUrl);
             var request = new RestRequest("api/TeacherApi/GetAllTeachers", Method.Get);
 
             var response = await client.ExecuteAsync(request);
-            if (response.IsSuccessful)
+            if (!response.IsSuccessful)
             {
-                // SỬA: Thêm JsonSerializerOptions để xử lý chữ hoa/thường
-                var teachers = JsonSerializer.Deserialize<List<Teacher>>(response.Content!,
-                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                return View(teachers);
-            }
-            else
-            {
-                ViewBag.Error = $"Không thể tải danh sách giáo viên. Lỗi: {response.StatusCode}";
+                ViewBag.Error = "Không thể tải danh sách giáo viên.";
                 return View(new List<Teacher>());
             }
+            var teachers = JsonSerializer.Deserialize<List<Teacher>>(response.Content!,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            // Nếu có từ khóa thì lọc
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                teachers = teachers
+                    .Where(t => (t.FirstName + " " + t.LastName)
+                    .Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+            return View(teachers);
         }
         // --- 2. CREATE (GET) ---
         [HttpGet]
