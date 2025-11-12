@@ -1,0 +1,102 @@
+﻿<style>
+    /* CSS cho hiệu ứng LED RGB Background */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        overflow: hidden; /* Ngăn cuộn trang nếu hiệu ứng lớn hơn viewport */
+        color: #fff; /* Màu chữ mặc định trắng cho nền tối */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh; /* Chiều cao tối thiểu 100% viewport */
+        position: relative;
+    }
+
+    /* Lớp phủ màu gradient động */
+    .rgb-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3, #FF0000);
+        background-size: 400% 400%; /* Kích thước lớn hơn để tạo animation */
+        animation: gradientRGB 15s ease infinite; /* Animation đổi màu */
+        z-index: -1; /* Đặt dưới nội dung */
+        filter: blur(80px); /* Làm mờ hiệu ứng để trông mềm mại hơn */
+        opacity: 0.8; /* Giảm độ trong suốt một chút */
+    }
+
+    /* Keyframes cho animation đổi màu */
+    @@keyframes gradientRGB {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* Định dạng card form để nổi bật trên nền */
+    .card {
+        background-color: rgba(0, 0, 0, 0.7); /* Nền tối trong suốt cho card */
+        border: 1px solid rgba(255, 255, 255, 0.2); /* Viền mờ */
+        color: #fff; /* Chữ trắng trong card */
+        position: relative; /* Đảm bảo card nằm trên background */
+        z-index: 1; /* Đặt card trên hiệu ứng background */
+        max-width: 450px; /* Giới hạn chiều rộng card */
+        width: 100%;
+    }
+
+    .card-title {
+        color: #fff; /* Tiêu đề trắng */
+    }
+
+    .form-label {
+        color: #ccc; /* Nhãn mờ hơn một chút */
+    }
+
+    .form-control, .form-select {
+        background-color: rgba(255, 255, 255, 0.1); /* Input nền trong suốt */
+        border: 1px solid rgba(255, 255, 255, 0.3); /* Viền input */
+        color: #fff; /* Chữ trong input trắng */
+    }
+
+        .form-control:focus, .form-select:focus {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: #88f; /* Viền sáng khi focus */
+            box-shadow: 0 0 0 0.25rem rgba(136, 136, 255, 0.25);
+        }
+
+        .form-select option {
+            background-color: #333; /* Nền cho option trong select */
+            color: #fff;
+        }
+
+    .text-danger {
+        color: #ff6b6b !important; /* Màu đỏ sáng hơn cho validation */
+    }
+
+    .btn-primary {
+        background-color: #007bff; /* Nút màu xanh mặc định Bootstrap */
+        border-color: #007bff;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+    a {
+        color: #88f; /* Màu link */
+    }
+
+        a:hover {
+            color: #aae;
+        }
+</style>

@@ -5,14 +5,17 @@ using quanlysv;
 using RestSharp;
 using System.Text.Json;
 using PagedList;
+using Microsoft.AspNetCore.Authorization; // ❗ Cần thêm using này
+
 namespace QuanLySinhVien.Controllers
 {
+    [Authorize]
     public class FacultyController : Controller
     {
         private readonly string apiBaseUrl = Config_Info.APIURL;
-        // GET: /Faculty
 
-        public async Task<IActionResult> Index(string keyword,int? page)
+        // GET: /Faculty - Cho phép TẤT CẢ mọi người xem (Kể cả người chưa đăng nhập)
+        public async Task<IActionResult> Index(string keyword, int? page)
         {
             var client = new RestClient(apiBaseUrl);
             var request = new RestRequest("api/FacultyApi/GetAllFaculties", Method.Get);
@@ -50,25 +53,31 @@ namespace QuanLySinhVien.Controllers
 
             return View(pagedData);
         }
+        // Hàm kiểm tra quyền Admin
+        private bool IsAdmin()
+        {
+            // Lấy Role từ Session, nếu không có thì trả về false
+            var userRole = HttpContext.Session.GetString("Role");
 
-        // GET: /Faculty/Create
+            // Lưu ý: Bạn cần phải lưu 'Role' vào Session trong AuthController.Login
+            return userRole == "Admin";
+        }
+        [Authorize(Roles = "Admin")] 
         [HttpGet]
-
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: /Faculty/Create
+        [Authorize(Roles = "Admin")] 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Faculty faculty)
         {
             if (!ModelState.IsValid)
                 return View(faculty);
 
             var client = new RestClient(apiBaseUrl);
-            var request = new RestRequest("api/FacultyApi/Add", Method.Post); // Sử dụng route "/Add"
+            var request = new RestRequest("api/FacultyApi/Add", Method.Post);
 
             request.AddJsonBody(faculty);
             var response = await client.ExecuteAsync(request);
@@ -76,47 +85,55 @@ namespace QuanLySinhVien.Controllers
             if (response.IsSuccessful)
                 return RedirectToAction(nameof(Index));
 
-            ViewBag.Error = $"Không thể thêm khoa mới. Chi tiết: {response.Content}"; // Hiển thị lỗi chi tiết
+            ViewBag.Error = $"Không thể thêm khoa mới. Chi tiết: {response.Content}";
             return View(faculty);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             var client = new RestClient(apiBaseUrl);
             var request = new RestRequest($"api/FacultyApi/id/{id}", Method.Get);
             var response = await client.ExecuteAsync(request);
+
             if (!response.IsSuccessful)
             {
                 return NotFound();
             }
             var faculty = JsonSerializer.Deserialize<Faculty>(response.Content!,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
             if (faculty == null)
                 return NotFound();
+
             return View(faculty);
         }
-        // POST: /Faculty/Edit/5
+
+        [Authorize(Roles = "Admin")] 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Faculty faculty)
         {
             if (id != faculty.FacultyID)
                 return BadRequest();
+
             if (!ModelState.IsValid)
                 return View(faculty);
+
             var client = new RestClient(apiBaseUrl);
             var request = new RestRequest("api/FacultyApi/Edit", Method.Post);
             request.AddJsonBody(faculty);
             var response = await client.ExecuteAsync(request);
+
             if (response.IsSuccessful)
                 return RedirectToAction(nameof(Index));
+
             ViewBag.Error = "Không thể cập nhật thông tin khoa.";
             return View(faculty);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var client = new RestClient(apiBaseUrl);
@@ -135,21 +152,24 @@ namespace QuanLySinhVien.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: /Faculty/Delete/5
+        [Authorize(Roles = "Admin")] 
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
             var client = new RestClient(apiBaseUrl);
             var request = new RestRequest($"api/FacultyApi/id/{id}", Method.Get);
             var response = await client.ExecuteAsync(request);
+
             if (!response.IsSuccessful)
             {
                 return NotFound();
             }
             var faculty = JsonSerializer.Deserialize<Faculty>(response.Content!,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
             if (faculty == null)
                 return NotFound();
+
             return View(faculty);
         }
     }

@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuanLySinhVien.Data;
-using quanlysv.Models;
+using QuanLySinhVien.Models;
+using quanlysv.Models; // Đảm bảo AccountCreateViewModel và Account đã được import
 using System.Security.Cryptography;
+using Microsoft.AspNetCore.Authentication; // Thêm using này
+using Microsoft.AspNetCore.Authentication.Cookies; // Thêm using này
+using System.Security.Claims; // Thêm using này
 using System.Text;
 
 namespace quanlysv.Controllers
@@ -15,7 +19,6 @@ namespace quanlysv.Controllers
         {
             _context = context;
         }
-
         [HttpGet]
         public IActionResult Login()
         {
@@ -23,7 +26,7 @@ namespace quanlysv.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(string username, string password)
+        public async Task<IActionResult> Login(string username, string password)
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
@@ -32,9 +35,9 @@ namespace quanlysv.Controllers
             }
 
             string hash = HashPassword(password);
-            var user = _context.Accounts
-            .FirstOrDefault(a => a.Username == username && a.PasswordHash == hash && a.IsActive);
 
+            var user = await _context.Accounts
+                .FirstOrDefaultAsync(a => a.Username == username && a.PasswordHash == hash && a.IsActive);
 
             if (user == null)
             {
@@ -42,12 +45,40 @@ namespace quanlysv.Controllers
                 return View();
             }
 
-            // Lưu session
+            // Tạo claims (đảm bảo role được nhận diện)
+            var claims = new List<Claim>
+{
+    new Claim(ClaimTypes.Name, user.Username),
+    new Claim(ClaimTypes.NameIdentifier, user.AccountID.ToString()),
+    new Claim(ClaimTypes.Role, user.Role) // rất quan trọng
+};
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+
+            // Lưu session nếu muốn
             HttpContext.Session.SetInt32("UserID", user.AccountID);
             HttpContext.Session.SetString("Username", user.Username);
 
             return RedirectToAction("Index", "Home");
         }
+
+
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            // Bạn có thể đặt logic kiểm tra xem người dùng đã đăng nhập chưa ở đây
+            // Nếu họ đã đăng nhập (nhưng không đủ quyền), hiển thị View AccessDenied
+            // Nếu chưa đăng nhập, bạn có thể chuyển hướng họ về Login
+
+            // Ví dụ đơn giản: Chỉ trả về View AccessDenied
+            return View();
+        }
+
+        // ... (Hàm HashPassword)
 
         [HttpGet]
         public IActionResult Logout()
@@ -56,6 +87,56 @@ namespace quanlysv.Controllers
             return RedirectToAction("Login");
         }
 
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View(new AccountCreateViewModel());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(AccountCreateViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // Kiểm tra tên đăng nhập đã tồn tại
+            var existingUser = await _context.Accounts
+                                            .FirstOrDefaultAsync(a => a.Username == model.Username);
+
+            if (existingUser != null)
+            {
+                ModelState.AddModelError("Username", "Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
+                return View(model);
+            }
+
+            // Mã hóa mật khẩu
+            var hashedPassword = HashPassword(model.Password);
+
+            // Thiết lập Role và RoleID mặc định
+            string userRole = model.Role ?? "User";
+            // Giả định RoleID = 1 là "Admin", 2 là "User"
+            int defaultRoleId = (userRole == "Admin") ? 1 : 2;
+
+            // Tạo Entity Account và lưu vào DB
+            var account = new Account
+            {
+                Username = model.Username,
+                PasswordHash = hashedPassword,
+                Role = userRole,
+                RoleID = defaultRoleId, // Cần điều chỉnh theo logic DB của bạn
+                IsActive = true,
+                CreatedAt = DateTime.Now
+            };
+
+            _context.Accounts.Add(account);
+            await _context.SaveChangesAsync();
+
+            // Chuyển hướng về trang Login để người dùng đăng nhập
+            TempData["SuccessMessage"] = "Tạo tài khoản thành công! Vui lòng đăng nhập.";
+            return RedirectToAction("Login");
+        }
         // Hàm hash mật khẩu (SHA256)
         private string HashPassword(string password)
         {

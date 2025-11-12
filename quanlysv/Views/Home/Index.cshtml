@@ -1,15 +1,41 @@
 ﻿@{
     ViewData["Title"] = "Trang Quản lý Sinh viên";
+
+    var username = User.Identity?.Name ?? "Khách";
+    var roleClaim = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role);
+    var role = roleClaim?.Value ?? "Chưa xác định";
 }
 
-<div class="container mt-4">
-    <h2>Xin chào, @ViewBag.Username 👋</h2>
-    <p>Chào mừng bạn đến với hệ thống Quản lý Sinh viên.</p>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
 
-    <div>
-        <strong>Vai trò:</strong> @ViewBag.Role
+<div class="container mt-5" style="font-family: 'Montserrat', sans-serif;">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card text-center shadow-lg"
+                 style="border-radius: 20px;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;">
+                <div class="card-body py-5">
+                    <h1 class="display-4">👋 Chào, @username!</h1>
+                    <p class="lead mt-3">Chào mừng bạn đến với <strong>trang quản lý sinh viên </strong> ✨</p>
+
+                    <div class="mt-4 mb-4">
+                        <span class="badge rounded-pill bg-warning text-dark fs-6 py-2 px-3">
+                            💼 Bạn ở đây với vai trò là : @role
+                        </span>
+                    </div>
+
+                    <div class="d-grid gap-2 col-6 mx-auto mt-4">
+                        <a class="btn btn-dark btn-lg rounded-pill fw-bold" asp-controller="Auth" asp-action="Logout">
+                            🔥 Đăng xuất
+                        </a>
+                    </div>
+
+                    <div class="mt-5">
+                        <p style="font-size: 0.9rem; opacity: 0.8;">© 2025 – Stay awesome, @username!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <hr />
-    <a class="btn btn-danger" asp-controller="Auth" asp-action="Logout">Đăng xuất</a>
 </div>

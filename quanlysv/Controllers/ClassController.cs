@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using QuanLySinhVien.Data;
 using QuanLySinhVien.Models;
@@ -8,6 +9,7 @@ using System.Text.Json;
 
 namespace QuanLySinhVien.Controllers
 {
+
     public class ClassController : Controller
     {
         private readonly string apiBaseUrl = Config_Info.APIURL;
@@ -69,7 +71,7 @@ namespace QuanLySinhVien.Controllers
 
             return View(pagedData);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult AddClass()
         {
@@ -100,6 +102,7 @@ namespace QuanLySinhVien.Controllers
             LoadSelectList();
             return View(model);
         }
+        [Authorize(Roles = "Admin")]
 
         [HttpGet]
         public async Task<IActionResult> EditClass(int id)
@@ -119,7 +122,6 @@ namespace QuanLySinhVien.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditClass(int id, Class model)
         {
             if (id != model.ClassID)
@@ -139,6 +141,8 @@ namespace QuanLySinhVien.Controllers
         }
 
         // DELETE CLASS
+        [Authorize(Roles = "Admin")]
+
         [HttpGet]
         public async Task<IActionResult> DeleteClass(int id)
         {

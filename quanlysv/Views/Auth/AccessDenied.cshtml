@@ -1,0 +1,14 @@
+﻿@* File: Views/Auth/AccessDenied.cshtml *@
+@{
+    ViewData["Title"] = "Không có quyền truy cập";
+}
+
+<div class="container mt-5">
+    <div class="alert alert-danger text-center" role="alert">
+        <h4 class="alert-heading">🚫 Truy Cập Bị Từ Chối (Access Denied)</h4>
+        <p>Rất tiếc, bạn không có đủ quyền hạn (Role) để truy cập vào trang này.</p>
+        <hr>
+        <p class="mb-0">Vui lòng <a href="@Url.Action("Logout", "Auth")" class="alert-link">Đăng xuất</a> và đăng nhập lại bằng tài khoản có quyền Admin.</p>
+        <p class="mb-0">Hoặc quay lại <a href="@Url.Action("Index", "Home")" class="alert-link">Trang Chủ</a>.</p>
+    </div>
+</div>

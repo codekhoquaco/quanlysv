@@ -54,7 +54,8 @@ public class SubjectController : Controller
         return View(PageData);
     }
 
-    // --- 2. CREATE (GET) ---
+    // 2. CREATE (GET)
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public IActionResult Create()
     {
@@ -71,7 +72,6 @@ public class SubjectController : Controller
     }
     //post 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public IActionResult Create(Subject subject)
     {
         if (!ModelState.IsValid)
@@ -96,7 +96,8 @@ public class SubjectController : Controller
     //    return View(subjectModel);
     //}
 
-    // --- 5. EDIT (GET) ---
+    //5. EDIT (GET) 
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public IActionResult Edit(int id)
     {
@@ -122,7 +123,6 @@ public class SubjectController : Controller
 
     // --- 6. EDIT (POST) ---
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public IActionResult Edit(int id, Subject subject)
     {
         if (id != subject.SubjectID)
@@ -144,6 +144,7 @@ public class SubjectController : Controller
     }
 
     // --- 7. DELETE (GET) ---
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> Delete(int id)
     {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QuanLySinhVien.Data;
@@ -60,6 +61,8 @@ namespace QuanLySinhVien.Controllers
             return View(pagedData);
         }
         // GET: /Student/Create
+
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -78,7 +81,6 @@ namespace QuanLySinhVien.Controllers
 
         // POST: /Student/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Student student)
         {
             if (!ModelState.IsValid)
@@ -99,6 +101,7 @@ namespace QuanLySinhVien.Controllers
 
 
         // GET: /Student/Edit/5
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
@@ -127,7 +130,6 @@ namespace QuanLySinhVien.Controllers
 
         // POST: /Student/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Student student)
         {
             if (id != student.StudentID)
@@ -147,6 +149,7 @@ namespace QuanLySinhVien.Controllers
         }
 
         // GET: /Student/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {

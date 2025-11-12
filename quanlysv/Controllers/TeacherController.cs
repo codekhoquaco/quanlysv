@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QuanLySinhVien.Data;
@@ -58,7 +59,8 @@ namespace QuanLySinhVien.Controllers
 
             return View(pagedData);
         }
-        // --- 2. CREATE (GET) ---
+        // 2. CREATE (GET) 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Create()
         {
@@ -73,9 +75,8 @@ namespace QuanLySinhVien.Controllers
             return View();
         }
 
-        // --- 3. CREATE (POST) ---
+        //3. CREATE (POST) 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Teacher teacher)
         {
             if (!ModelState.IsValid)
@@ -99,7 +100,8 @@ namespace QuanLySinhVien.Controllers
             return View(teacher);
         }
 
-        // --- 5. EDIT (GET) ---
+        //5. EDIT (GET) 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
@@ -125,9 +127,8 @@ namespace QuanLySinhVien.Controllers
             return View(teacher);
         }
 
-        // --- 6. EDIT (POST) ---
+        //6. EDIT (POST)
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Teacher teacher)
         {
             if (id != teacher.TeacherID)
@@ -147,7 +148,8 @@ namespace QuanLySinhVien.Controllers
             return View(teacher);
         }
 
-        // --- 7. DELETE (GET) ---
+        //7. DELETE (GET) 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
@@ -166,7 +168,6 @@ namespace QuanLySinhVien.Controllers
 
         // --- 8. DELETE (POST) ---
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeteleComfirmed(int id)
         {
             var client = new RestClient(apiBaseUrl);

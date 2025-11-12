@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QuanLySinhVien.Data;
@@ -31,8 +32,9 @@ public class GradeController : Controller
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         return View(grades);
     }
-
+    [Authorize(Roles = "Admin")]
     [HttpGet]
+
     public async Task<IActionResult> Create()
     {
        return View();
@@ -59,7 +61,7 @@ public class GradeController : Controller
         }
         return View(grade);
     }
-
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
@@ -101,7 +103,6 @@ public class GradeController : Controller
     }
 
     [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
         var client = new RestClient(apiBaseUrl);
@@ -117,6 +118,8 @@ public class GradeController : Controller
             return RedirectToAction(nameof(Index));
         }
     }
+
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> Details(int id)
     {

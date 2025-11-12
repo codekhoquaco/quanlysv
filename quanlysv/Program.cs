@@ -20,7 +20,7 @@ internal class Program
         // ==========================
         // 2️⃣ ĐĂNG KÝ DỊCH VỤ
         // ==========================
-        builder.Services.AddHttpClient(); // Cho phép gọi API từ client (RestSharp, HttpClient)
+        builder.Services.AddHttpClient();
 
         // Đăng ký DbContext
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -31,8 +31,10 @@ internal class Program
         builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {
-                options.LoginPath = "/Account/Login";
-                options.AccessDeniedPath = "/Account/AccessDenied";
+                // ❗ ĐÃ SỬA: Thay /Account/Login thành /Auth/Login
+                options.LoginPath = "/Auth/Login";
+                // ❗ ĐÃ SỬA: Thay /Account/AccessDenied thành /Auth/AccessDenied
+                options.AccessDeniedPath = "/Auth/AccessDenied";
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
             });
 
