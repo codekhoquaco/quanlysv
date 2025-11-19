@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using QuanLySinhVien.Filters;
 using QuanLySinhVien.Data;
 using QuanLySinhVien.Models;
 using quanlysv;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace QuanLySinhVien.Controllers
 {
+    [CustomActionFilter(FunctionCode = "TEACHER_VIEW", CheckAuthentication = true)]
     public class TeacherController : Controller
     {
         private readonly string apiBaseUrl = Config_Info.APIURL;
@@ -60,7 +62,7 @@ namespace QuanLySinhVien.Controllers
             return View(pagedData);
         }
         // 2. CREATE (GET) 
-        [Authorize(Roles = "Admin")]
+        [CustomActionFilter(FunctionCode = "TEACHER_CREATE")]
         [HttpGet]
         public IActionResult Create()
         {
@@ -101,7 +103,7 @@ namespace QuanLySinhVien.Controllers
         }
 
         //5. EDIT (GET) 
-        [Authorize(Roles = "Admin")]
+        [CustomActionFilter(FunctionCode = "TEACHER_EDIT")]
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
@@ -149,7 +151,7 @@ namespace QuanLySinhVien.Controllers
         }
 
         //7. DELETE (GET) 
-        [Authorize(Roles = "Admin")]
+        [CustomActionFilter(FunctionCode = "TEACHER_DELETE")]
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using QuanLySinhVien.Data;
 using QuanLySinhVien.Models;
 
-namespace quanlysv.Controllers.API
+namespace QuanLySinhVien.API.Controllers.API
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -63,7 +63,7 @@ namespace quanlysv.Controllers.API
             }
         }
 
-        [HttpPost("Edit")]
+        [HttpPut("Edit")]
 
         public async Task<IActionResult> UpdateFaculty([FromBody] Faculty faculty)
         {

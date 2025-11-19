@@ -2,11 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using QuanLySinhVien.Data;
 using QuanLySinhVien.Models;
-using quanlysv.Models; // Đảm bảo AccountCreateViewModel và Account đã được import
 using System.Security.Cryptography;
-using Microsoft.AspNetCore.Authentication; // Thêm using này
-using Microsoft.AspNetCore.Authentication.Cookies; // Thêm using này
-using System.Security.Claims; // Thêm using này
+using Microsoft.AspNetCore.Authentication; 
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 using System.Text;
 
 namespace quanlysv.Controllers
@@ -47,11 +46,11 @@ namespace quanlysv.Controllers
 
             // Tạo claims (đảm bảo role được nhận diện)
             var claims = new List<Claim>
-{
-    new Claim(ClaimTypes.Name, user.Username),
-    new Claim(ClaimTypes.NameIdentifier, user.AccountID.ToString()),
-    new Claim(ClaimTypes.Role, user.Role) // rất quan trọng
-};
+            {
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.NameIdentifier, user.AccountID.ToString()),
+                new Claim(ClaimTypes.Role, user.Role) // rất quan trọng
+            };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);

@@ -4,12 +4,15 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QuanLySinhVien.Data;
 using QuanLySinhVien.Models;
+using QuanLySinhVien.Filters;
 using quanlysv;
 using RestSharp;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 
 namespace QuanLySinhVien.Controllers
 {
+    [CustomActionFilter(FunctionCode = "STUDENT_VIEW", CheckAuthentication = true)]
     public class StudentController : Controller
     {
         private readonly string apiBaseUrl = Config_Info.APIURL;
@@ -62,7 +65,8 @@ namespace QuanLySinhVien.Controllers
         }
         // GET: /Student/Create
 
-        [Authorize(Roles = "Admin")]
+        [CustomActionFilter(FunctionCode = "STUDENT_CREATE")]
+
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -101,7 +105,7 @@ namespace QuanLySinhVien.Controllers
 
 
         // GET: /Student/Edit/5
-        [Authorize(Roles = "Admin")]
+        [CustomActionFilter(FunctionCode = "STUDENT_EDIT")]
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
@@ -135,8 +139,15 @@ namespace QuanLySinhVien.Controllers
             if (id != student.StudentID)
                 return NotFound();
 
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ClassList = new SelectList(_context.Classes, "ClassID", "ClassName");
+                return View(student);
+            }
+
+
             var client = new RestClient(apiBaseUrl);
-            var request = new RestRequest($"{id}", Method.Put);
+            var request = new RestRequest($"api/StudentApi/{id}", Method.Put);
             request.AddJsonBody(student);
 
             var response = await client.ExecuteAsync(request);
@@ -145,11 +156,12 @@ namespace QuanLySinhVien.Controllers
                 return RedirectToAction(nameof(Index));
 
             ViewBag.Error = "Không thể cập nhật sinh viên.";
+
             return View(student);
         }
 
         // GET: /Student/Delete/5
-        [Authorize(Roles = "Admin")]
+        [CustomActionFilter(FunctionCode = "STUDENT_DELETE")]
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {

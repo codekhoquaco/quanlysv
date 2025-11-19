@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QuanLySinhVien.Data;
+using QuanLySinhVien.Filters;
 using QuanLySinhVien.Models;
 using quanlysv;
 using RestSharp;
 using System.Text.Json;
 
-
+[CustomActionFilter(FunctionCode= "SUBJECT_VIEW", CheckAuthentication =true)]
 public class SubjectController : Controller
 {
     private readonly string apiBaseUrl = Config_Info.APIURL;
@@ -55,7 +56,7 @@ public class SubjectController : Controller
     }
 
     // 2. CREATE (GET)
-    [Authorize(Roles = "Admin")]
+    [CustomActionFilter(FunctionCode = "SUBJECT_CREATE")]
     [HttpGet]
     public IActionResult Create()
     {
@@ -97,7 +98,7 @@ public class SubjectController : Controller
     //}
 
     //5. EDIT (GET) 
-    [Authorize(Roles = "Admin")]
+    [CustomActionFilter(FunctionCode = "SUBJECT_EDIT")]
     [HttpGet]
     public IActionResult Edit(int id)
     {
@@ -144,7 +145,7 @@ public class SubjectController : Controller
     }
 
     // --- 7. DELETE (GET) ---
-    [Authorize(Roles = "Admin")]
+    [CustomActionFilter(FunctionCode = "SUBJECT_DELETE")]
     [HttpGet]
     public async Task<IActionResult> Delete(int id)
     {

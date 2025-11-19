@@ -45,7 +45,7 @@ namespace QuanLySinhVien.Models
         public DateTime EnrollmentDate { get; set; }
         [Display(Name = "ID Lớp Học")]
         public int ClassID { get; set; } // chỉ là cột, không có FK
-
+        //[NotMapped]
         //public string ClassName { get; set; } // Thuộc tính bổ sung để hiển thị tên lớp
     }
 }

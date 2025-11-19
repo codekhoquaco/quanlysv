@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using QuanLySinhVien.Models;
+using QuanLySinhVien.Data;
+using QuanLySinhVien.Filters;
 using quanlysv;
 using RestSharp;
 using System.Text.Json;
@@ -9,7 +11,8 @@ using Microsoft.AspNetCore.Authorization; // ❗ Cần thêm using này
 
 namespace QuanLySinhVien.Controllers
 {
-    [Authorize]
+    //[CustomActionFilter(FunctionCode = "FACULTY_VIEW", CheckAuthentication = true)]
+
     public class FacultyController : Controller
     {
         private readonly string apiBaseUrl = Config_Info.APIURL;
@@ -53,23 +56,14 @@ namespace QuanLySinhVien.Controllers
 
             return View(pagedData);
         }
-        // Hàm kiểm tra quyền Admin
-        private bool IsAdmin()
-        {
-            // Lấy Role từ Session, nếu không có thì trả về false
-            var userRole = HttpContext.Session.GetString("Role");
 
-            // Lưu ý: Bạn cần phải lưu 'Role' vào Session trong AuthController.Login
-            return userRole == "Admin";
-        }
-        [Authorize(Roles = "Admin")] 
+        [CustomActionFilter(FunctionCode = "FACULTY_CREATE")]
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
-        [Authorize(Roles = "Admin")] 
         [HttpPost]
         public async Task<IActionResult> Create(Faculty faculty)
         {
@@ -89,7 +83,7 @@ namespace QuanLySinhVien.Controllers
             return View(faculty);
         }
 
-        [Authorize(Roles = "Admin")]
+        [CustomActionFilter(FunctionCode = "FACULTY_EDIT")]
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
@@ -109,8 +103,6 @@ namespace QuanLySinhVien.Controllers
 
             return View(faculty);
         }
-
-        [Authorize(Roles = "Admin")] 
         [HttpPost]
         public async Task<IActionResult> Edit(int id, Faculty faculty)
         {
@@ -121,7 +113,7 @@ namespace QuanLySinhVien.Controllers
                 return View(faculty);
 
             var client = new RestClient(apiBaseUrl);
-            var request = new RestRequest("api/FacultyApi/Edit", Method.Post);
+            var request = new RestRequest("api/FacultyApi/Edit", Method.Put);
             request.AddJsonBody(faculty);
             var response = await client.ExecuteAsync(request);
 
@@ -132,7 +124,6 @@ namespace QuanLySinhVien.Controllers
             return View(faculty);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -152,7 +143,7 @@ namespace QuanLySinhVien.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Admin")] 
+        [CustomActionFilter(FunctionCode = "FACULTY_DELETE")]
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {

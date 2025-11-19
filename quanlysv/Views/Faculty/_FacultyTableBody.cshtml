@@ -10,6 +10,7 @@
             <td>@Html.DisplayFor(modelItem => item.Phone)</td>
             <td>@Html.DisplayFor(modelItem => item.Email)</td>
             <td>
+
                 <a asp-action="Edit" asp-route-id="@item.FacultyID" class="btn btn-sm btn-warning me-1">Sửa</a>
                 <a asp-action="Delete" asp-route-id="@item.FacultyID" class="btn btn-sm btn-danger">Xóa</a>
             </td>

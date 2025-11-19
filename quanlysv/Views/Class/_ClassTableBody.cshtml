@@ -5,11 +5,11 @@
     @foreach (var item in Model)
     {
         <tr>
-            <td>@Html.DisplayFor(modelItem => item.ClassID)</td>
+            @* <td>@Html.DisplayFor(modelItem => item.ClassID)</td> *@
             <td>@Html.DisplayFor(modelItem => item.ClassName)</td>
-            <td>@Html.DisplayFor(modelItem => item.FacultyID)</td>
+            @* <td>@Html.DisplayFor(modelItem => item.FacultyID)</td> *@
             <td>@Html.DisplayFor(modelItem => item.AcademicYear)</td>
-            <td>@Html.DisplayFor(modelItem => item.HomeroomTeacher)</td>
+            @* <td>@Html.DisplayFor(modelItem => item.HomeroomTeacher)</td> *@
             <td>
                 <a asp-action="EditClass" asp-route-id="@item.ClassID" class="btn btn-sm btn-warning me-1">Sửa</a>
                 <a asp-action="DeleteClass" asp-route-id="@item.ClassID" class="btn btn-sm btn-danger">Xóa</a>

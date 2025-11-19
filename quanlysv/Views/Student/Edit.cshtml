@@ -3,21 +3,23 @@
 @{
     ViewData["Title"] = "Chỉnh Sửa Sinh Viên";
 }
+
 <div class="card shadow-sm mb-4">
     <div class="card-header bg-warning text-dark">
         <h3 class="mb-0">📝 @ViewData["Title"]</h3>
     </div>
     <div class="card-body">
-        <input type="hidden" asp-for="StudentID" />
-
-        <form asp-action="Create" method="post">
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <input type="hidden" asp-for="StudentID" />
             <partial name="_StudentFormFields" model="Model" />
 
-            <button type="submit" class="btn btn-primary mt-3">Thêm</button>
+            <button type="submit" class="btn btn-warning mt-3">Cập nhật</button>
             <a asp-action="Index" class="btn btn-secondary mt-3">Quay lại</a>
         </form>
     </div>
 </div>
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
